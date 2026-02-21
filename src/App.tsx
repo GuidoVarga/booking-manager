@@ -1,4 +1,5 @@
 import { Toaster } from "sonner"
+import BookingsPage from "./pages/BookingsPage"
 
 export default function App() {
   return (
@@ -12,9 +13,7 @@ export default function App() {
       </header>
 
       <main className="mx-auto max-w-5xl px-4 py-8">
-        <p className="text-muted-foreground">
-          Bookings will be rendered here.
-        </p>
+        <BookingsPage />
       </main>
 
       <Toaster richColors position="top-right" />
