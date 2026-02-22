@@ -205,4 +205,5 @@ Best practices applied: seeding via `localStorage`, selectors with `data-testid`
 - Database persistence (PostgreSQL + Prisma)
 - Full async state management (loading / error / retry)
 - SSR/ISR if the use case justified it
-(In that case Next.js would be a better choice than a Vite SPA)
+
+(Next.js would be a better choice than a Vite SPA)
