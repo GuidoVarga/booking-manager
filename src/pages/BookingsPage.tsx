@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react"
 import { toast } from "sonner"
-import { useBookingStore } from "@/features/bookings/store/booking-store"
+import { useBookingStore } from "@/features/bookings/store/bookingStore"
 import { hasOverlap } from "@/features/bookings/utils/overlap"
 import type { BookingFormData } from "@/features/bookings/utils/validation"
 import { useDevice } from "@/shared/hooks/useDevice"

@@ -19,7 +19,7 @@ export function BookingCardList({
   return (
     <div className="space-y-4">
       {bookings.map((booking) => (
-        <Card key={booking.id} role="article" aria-label={`Booking for ${booking.guestName}`}>
+        <Card key={booking.id} role="article" aria-label={`Booking for ${booking.guestName}`} data-testid={`booking-row-${booking.id}`}>
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <p className="font-medium">{booking.guestName}</p>

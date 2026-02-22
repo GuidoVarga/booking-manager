@@ -33,7 +33,7 @@ export function BookingTable({ bookings, onEdit, onDelete }: BookingTableProps) 
       </TableHeader>
       <TableBody>
         {bookings.map((booking) => (
-          <TableRow key={booking.id}>
+          <TableRow key={booking.id} data-testid={`booking-row-${booking.id}`}>
             <TableCell className="font-medium">{booking.guestName}</TableCell>
             <TableCell>{getPropertyName(booking.propertyId)}</TableCell>
             <TableCell>{booking.startDate}</TableCell>

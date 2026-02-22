@@ -75,7 +75,7 @@ export function BookingForm({ booking, onSubmit, onCancel }: BookingFormProps) {
                   value={field.value}
                 >
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger data-testid="property-select">
                       <SelectValue placeholder="Select a property" />
                     </SelectTrigger>
                   </FormControl>
