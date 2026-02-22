@@ -17,9 +17,9 @@ export function BookingCardList({
   onDelete,
 }: BookingCardListProps) {
   return (
-    <section className="space-y-4" aria-label="Bookings list">
+    <div className="space-y-4">
       {bookings.map((booking) => (
-        <Card key={booking.id}>
+        <Card key={booking.id} role="article" aria-label={`Booking for ${booking.guestName}`}>
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <p className="font-medium">{booking.guestName}</p>
@@ -37,6 +37,7 @@ export function BookingCardList({
             <Button
               variant="outline"
               size="sm"
+              aria-label={`Edit booking for ${booking.guestName}`}
               onClick={() => onEdit(booking.id)}
             >
               <Pencil className="mr-1 h-3 w-3" />
@@ -45,6 +46,7 @@ export function BookingCardList({
             <Button
               variant="destructive"
               size="sm"
+              aria-label={`Delete booking for ${booking.guestName}`}
               onClick={() => onDelete(booking.id)}
             >
               <Trash2 className="mr-1 h-3 w-3" />
@@ -53,6 +55,6 @@ export function BookingCardList({
           </CardFooter>
         </Card>
       ))}
-    </section>
+    </div>
   )
 }

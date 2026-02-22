@@ -43,6 +43,7 @@ export function BookingTable({ bookings, onEdit, onDelete }: BookingTableProps) 
                 <Button
                   variant="outline"
                   size="sm"
+                  aria-label={`Edit booking for ${booking.guestName}`}
                   onClick={() => onEdit(booking.id)}
                 >
                   <Pencil className="mr-1 h-3 w-3" />
@@ -51,6 +52,7 @@ export function BookingTable({ bookings, onEdit, onDelete }: BookingTableProps) 
                 <Button
                   variant="destructive"
                   size="sm"
+                  aria-label={`Delete booking for ${booking.guestName}`}
                   onClick={() => onDelete(booking.id)}
                 >
                   <Trash2 className="mr-1 h-3 w-3" />

@@ -121,14 +121,14 @@ export function BookingForm({ booking, onSubmit, onCancel }: BookingFormProps) {
           />
         </div>
 
-        <footer className="flex justify-end gap-2 border-t px-4 pt-4 mt-6 mb-4">
+        <div className="flex justify-end gap-2 border-t px-4 pt-4 mt-6 mb-4">
           <Button type="button" variant="outline" onClick={onCancel}>
             Cancel
           </Button>
           <Button type="submit">
             {isEditing ? "Save changes" : "Create booking"}
           </Button>
-        </footer>
+        </div>
       </form>
     </Form>
   )
