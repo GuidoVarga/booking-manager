@@ -1,8 +1,8 @@
-import { Calendar, Pencil, Trash2, Users } from "lucide-react"
+import { Calendar, Pencil, Trash2, User, Users } from "lucide-react"
 import type { Booking } from "@/shared/types/types"
 import { Button } from "@/shared/ui/Button"
 import { Card, CardContent, CardFooter, CardHeader } from "@/shared/ui/Card"
-import { getPropertyName } from "../utils/getPropertyName"
+import { getPropertyById } from "../utils/getPropertyById"
 import { formatDate } from "@/shared/utils/formatDate"
 
 interface BookingCardListProps {
@@ -19,7 +19,9 @@ export function BookingCardList({
   return (
     <div className="space-y-3">
       {bookings.map((booking) => {
-        const propertyName = getPropertyName(booking.propertyId)
+        const property = getPropertyById(booking.propertyId)
+
+        const { name: propertyName, address } = property ?? {};
 
         return (
           <Card
@@ -32,10 +34,16 @@ export function BookingCardList({
             <CardHeader className="pb-2">
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0">
-                  <h3 className="text-2xl font-semibold leading-tight truncate">
-                    {propertyName}
-                  </h3>
-                  <p className="text-lg mt-4">
+                  <div>
+                    <h3 className="text-2xl font-semibold leading-tight truncate">
+                      {propertyName}
+                    </h3>
+                    <p className="text-base text-muted-foreground">
+                      {address}
+                    </p>
+                  </div>
+                  <p className="text-xl mt-4 flex items-center gap-2">
+                    <User className="h-5 w-5 shrink-0" aria-hidden="true" />
                     {booking.guestName}
                   </p>
                 </div>
@@ -44,7 +52,7 @@ export function BookingCardList({
 
             <CardContent className="space-y-1.5 pb-3">
               <div className="flex items-center gap-1.5 text-base text-muted-foreground">
-                <Calendar className="h-4 w-4 shrink-0" aria-hidden="true" />
+                <Calendar className="h-5 w-5 shrink-0" aria-hidden="true" />
                 <span>
                   {formatDate(booking.startDate)} → {formatDate(booking.endDate)}
                 </span>
@@ -54,7 +62,7 @@ export function BookingCardList({
                 </span>
               </div>
               <div className="flex items-center gap-1.5 text-base text-muted-foreground">
-                <Users className="h-4 w-4 shrink-0" aria-hidden="true" />
+                <Users className="h-5 w-5 shrink-0" aria-hidden="true" />
                 <span>
                   {booking.numberOfGuests}{" "}
                   {booking.numberOfGuests === 1 ? "guest" : "guests"}

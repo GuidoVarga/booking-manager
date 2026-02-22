@@ -10,7 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/shared/ui/Table"
-import { getPropertyName } from "../utils/getPropertyName"
+import { getPropertyById } from "../utils/getPropertyById"
 import { formatDate } from "@/shared/utils/formatDate"
 
 interface BookingTableProps {
@@ -35,38 +35,45 @@ export function BookingTable({ bookings, onEdit, onDelete }: BookingTableProps) 
         </TableRow>
       </TableHeader>
       <TableBody>
-        {bookings.map((booking) => (
-          <TableRow key={booking.id} data-testid={`booking-row-${booking.id}`}>
-            <TableCell className="font-medium">{getPropertyName(booking.propertyId)}</TableCell>
-            <TableCell>{booking.guestName}</TableCell>
-            <TableCell className="text-right">{booking.numberOfGuests}</TableCell>
-            <TableCell className="text-right">{booking.nights}</TableCell>
-            <TableCell className="text-right">{formatDate(booking.startDate)}</TableCell>
-            <TableCell className="text-right">{formatDate(booking.endDate)}</TableCell>
-            <TableCell className="text-right">
-              <div className="flex justify-end gap-2">
-                <Button
-                  variant="primaryOutline"
-                  size="sm"
-                  aria-label={`Edit booking for ${booking.guestName}`}
-                  onClick={() => onEdit(booking.id)}
-                >
-                  <Pencil className="mr-1 h-3 w-3" />
-                  Edit
-                </Button>
-                <Button
-                  variant="destructiveOutline"
-                  size="sm"
-                  aria-label={`Delete booking for ${booking.guestName}`}
-                  onClick={() => onDelete(booking.id)}
-                >
-                  <Trash2 className="mr-1 h-3 w-3" />
-                  Delete
-                </Button>
-              </div>
-            </TableCell>
-          </TableRow>
-        ))}
+        {bookings.map((booking) => {
+          const property = getPropertyById(booking.propertyId)
+          return (
+            <TableRow key={booking.id} data-testid={`booking-row-${booking.id}`}>
+              <TableCell className="font-medium">{property?.name}
+                <span className="text-muted-foreground text-sm pl-2">
+                  {`(${property?.address})`}
+                </span>
+              </TableCell>
+              <TableCell>{booking.guestName}</TableCell>
+              <TableCell className="text-right">{booking.numberOfGuests}</TableCell>
+              <TableCell className="text-right">{booking.nights}</TableCell>
+              <TableCell className="text-right">{formatDate(booking.startDate)}</TableCell>
+              <TableCell className="text-right">{formatDate(booking.endDate)}</TableCell>
+              <TableCell className="text-right">
+                <div className="flex justify-end gap-2">
+                  <Button
+                    variant="primaryOutline"
+                    size="sm"
+                    aria-label={`Edit booking for ${booking.guestName}`}
+                    onClick={() => onEdit(booking.id)}
+                  >
+                    <Pencil className="mr-1 h-3 w-3" />
+                    Edit
+                  </Button>
+                  <Button
+                    variant="destructiveOutline"
+                    size="sm"
+                    aria-label={`Delete booking for ${booking.guestName}`}
+                    onClick={() => onDelete(booking.id)}
+                  >
+                    <Trash2 className="mr-1 h-3 w-3" />
+                    Delete
+                  </Button>
+                </div>
+              </TableCell>
+            </TableRow>
+          )
+        })}
       </TableBody>
     </Table>
   )

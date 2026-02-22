@@ -3,8 +3,10 @@ import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { DeleteBookingDialog } from "../DeleteBookingDialog"
 import { JOHN_BOOKING } from "./mockData/mockData"
-import { getPropertyName } from "../../utils/getPropertyName"
+import { getPropertyById } from "../../utils/getPropertyById"
 import { formatDate } from "@/shared/utils/formatDate"
+
+const johnProperty = getPropertyById(JOHN_BOOKING.propertyId)!
 
 describe("DeleteBookingDialog", () => {
   it("renders the dialog with contextual booking info", () => {
@@ -17,7 +19,7 @@ describe("DeleteBookingDialog", () => {
       />,
     )
     expect(screen.getByText("Are you sure you want to delete this booking?")).toBeInTheDocument()
-    expect(screen.getByText(getPropertyName(JOHN_BOOKING.propertyId))).toBeInTheDocument()
+    expect(screen.getByText(johnProperty.name)).toBeInTheDocument()
     expect(screen.getByText(JOHN_BOOKING.guestName)).toBeInTheDocument()
     expect(screen.getByText(`${JOHN_BOOKING.nights} nights`)).toBeInTheDocument()
     expect(screen.getByText(`${formatDate(JOHN_BOOKING.startDate)} → ${formatDate(JOHN_BOOKING.endDate)}`)).toBeInTheDocument()

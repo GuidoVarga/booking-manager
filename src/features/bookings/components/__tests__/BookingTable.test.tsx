@@ -3,20 +3,22 @@ import { render, screen, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { BookingTable } from "../BookingTable"
 import { JOHN_BOOKING, EMILY_BOOKING } from "./mockData/mockData"
-import { getPropertyName } from "../../utils/getPropertyName"
+import { getPropertyById } from "../../utils/getPropertyById"
 import { formatDate } from "@/shared/utils/formatDate"
 
 const bookings = [JOHN_BOOKING, EMILY_BOOKING]
 
+const johnProperty = getPropertyById(JOHN_BOOKING.propertyId)!
+
 describe("BookingTable", () => {
-  it("renders all bookings with property as first column", () => {
+  it("renders property name and address as first column", () => {
     render(<BookingTable bookings={bookings} onEdit={vi.fn()} onDelete={vi.fn()} />)
 
     const johnRow = screen.getByTestId(`booking-row-${JOHN_BOOKING.id}`)
     const cells = within(johnRow).getAllByRole("cell")
 
-    // Property is the first cell, Guest is the second
-    expect(cells[0]).toHaveTextContent(getPropertyName(JOHN_BOOKING.propertyId))
+    expect(cells[0]).toHaveTextContent(johnProperty.name)
+    expect(cells[0]).toHaveTextContent(johnProperty.address)
     expect(cells[1]).toHaveTextContent(JOHN_BOOKING.guestName)
   })
 

@@ -10,4 +10,9 @@ export interface Booking {
 export interface Property {
   id: string
   name: string
+  description?: string
+  address: string
+  city: string
+  state?: string
+  country: string
 }

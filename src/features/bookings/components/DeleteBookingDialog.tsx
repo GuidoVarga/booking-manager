@@ -9,7 +9,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/shared/ui/AlertDialog"
-import { getPropertyName } from "../utils/getPropertyName"
+import { getPropertyById } from "../utils/getPropertyById"
 import { formatDate } from "@/shared/utils/formatDate"
 
 interface DeleteBookingDialogProps {
@@ -36,7 +36,7 @@ export function DeleteBookingDialog({
           <AlertDialogDescription asChild>
             <div className="space-y-0.5 text-sm">
               <p className="text-base font-semibold text-foreground">
-                {getPropertyName(booking.propertyId)}
+                {getPropertyById(booking.propertyId)?.name}
               </p>
               <p className="text-muted-foreground">{booking.guestName}</p>
               <p className="text-muted-foreground">{booking.nights} nights</p>

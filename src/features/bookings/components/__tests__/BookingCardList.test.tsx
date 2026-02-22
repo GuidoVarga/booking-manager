@@ -3,25 +3,30 @@ import { render, screen, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { BookingCardList } from "../BookingCardList"
 import { EMILY_BOOKING, JOHN_BOOKING } from "./mockData/mockData"
-import { getPropertyName } from "../../utils/getPropertyName"
+import { getPropertyById } from "../../utils/getPropertyById"
 import { formatDate } from "@/shared/utils/formatDate"
 
 const bookings = [JOHN_BOOKING, EMILY_BOOKING]
 
+const johnProperty = getPropertyById(JOHN_BOOKING.propertyId)!
+const emilyProperty = getPropertyById(EMILY_BOOKING.propertyId)!
+
 describe("BookingCardList", () => {
-  it("renders property as title and guest as subtitle per card", () => {
+  it("renders property as title, address, and guest as subtitle per card", () => {
     render(<BookingCardList bookings={bookings} onEdit={vi.fn()} onDelete={vi.fn()} />)
 
     const johnCard = screen.getByLabelText(
-      `Booking for ${JOHN_BOOKING.guestName} at ${getPropertyName(JOHN_BOOKING.propertyId)}`,
+      `Booking for ${JOHN_BOOKING.guestName} at ${johnProperty.name}`,
     )
-    expect(within(johnCard).getByText(getPropertyName(JOHN_BOOKING.propertyId))).toBeInTheDocument()
+    expect(within(johnCard).getByText(johnProperty.name)).toBeInTheDocument()
+    expect(within(johnCard).getByText(johnProperty.address)).toBeInTheDocument()
     expect(within(johnCard).getByText(JOHN_BOOKING.guestName)).toBeInTheDocument()
 
     const emilyCard = screen.getByLabelText(
-      `Booking for ${EMILY_BOOKING.guestName} at ${getPropertyName(EMILY_BOOKING.propertyId)}`,
+      `Booking for ${EMILY_BOOKING.guestName} at ${emilyProperty.name}`,
     )
-    expect(within(emilyCard).getByText(getPropertyName(EMILY_BOOKING.propertyId))).toBeInTheDocument()
+    expect(within(emilyCard).getByText(emilyProperty.name)).toBeInTheDocument()
+    expect(within(emilyCard).getByText(emilyProperty.address)).toBeInTheDocument()
     expect(within(emilyCard).getByText(EMILY_BOOKING.guestName)).toBeInTheDocument()
   })
 
@@ -60,7 +65,7 @@ describe("BookingCardList", () => {
     const card = screen.getByRole("article")
     expect(card).toHaveAttribute(
       "aria-label",
-      `Booking for ${JOHN_BOOKING.guestName} at ${getPropertyName(JOHN_BOOKING.propertyId)}`,
+      `Booking for ${JOHN_BOOKING.guestName} at ${johnProperty.name}`,
     )
   })
 
