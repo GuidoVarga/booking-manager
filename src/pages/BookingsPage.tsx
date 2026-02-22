@@ -10,6 +10,7 @@ import { BookingTable } from "@/features/bookings/components/BookingTable"
 import { BookingCardList } from "@/features/bookings/components/BookingCardList"
 import { BookingSheet } from "@/features/bookings/components/BookingSheet"
 import { DeleteBookingDialog } from "@/features/bookings/components/DeleteBookingDialog"
+import { getNightsQuantity } from "@/features/bookings/utils/getNightsQuantity"
 
 export default function BookingsPage() {
   const {
@@ -59,14 +60,18 @@ export default function BookingsPage() {
         })
         return;
       }
-
+      const nights = getNightsQuantity(data.startDate, data.endDate)
       if (editingBookingId) {
-        updateBooking(editingBookingId, data)
+        updateBooking(editingBookingId, {
+          ...data,
+          nights,
+        })
         toast.success("Booking updated")
       } else {
         createBooking({
           id: crypto.randomUUID(),
           ...data,
+          nights,
         })
         toast.success("Booking created")
       }
@@ -119,6 +124,11 @@ export default function BookingsPage() {
 
       <DeleteBookingDialog
         open={!!deletingBookingId}
+        booking={
+          deletingBookingId
+            ? bookings.find((b) => b.id === deletingBookingId) ?? null
+            : null
+        }
         onOpenChange={(open) => {
           if (!open) setDeletingBookingId(null)
         }}

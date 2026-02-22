@@ -26,6 +26,7 @@ export function BookingTable({ bookings, onEdit, onDelete }: BookingTableProps) 
         <TableRow>
           <TableHead>Guest</TableHead>
           <TableHead>Property</TableHead>
+          <TableHead>Nights</TableHead>
           <TableHead>Start</TableHead>
           <TableHead>End</TableHead>
           <TableHead className="text-right">Actions</TableHead>
@@ -36,6 +37,7 @@ export function BookingTable({ bookings, onEdit, onDelete }: BookingTableProps) 
           <TableRow key={booking.id} data-testid={`booking-row-${booking.id}`}>
             <TableCell className="font-medium">{booking.guestName}</TableCell>
             <TableCell>{getPropertyName(booking.propertyId)}</TableCell>
+            <TableCell>{booking.nights}</TableCell>
             <TableCell>{booking.startDate}</TableCell>
             <TableCell>{booking.endDate}</TableCell>
             <TableCell className="text-right">

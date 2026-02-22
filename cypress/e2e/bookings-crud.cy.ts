@@ -39,10 +39,9 @@ describe("Bookings CRUD — smoke test", () => {
     cy.seedBookings([SEED_BOOKING])
     cy.reload()
 
-    // Scope to the specific row — click the visible "Edit booking" button
     cy.get(`[data-testid="booking-row-${SEED_BOOKING.id}"]`).within(() => {
       cy.contains("Seeded Guest").should("be.visible")
-      cy.contains("button", "Edit booking").click()
+      cy.contains("button", "Edit").click()
     })
 
     // Update guest name inside the Sheet
@@ -62,16 +61,11 @@ describe("Bookings CRUD — smoke test", () => {
     cy.seedBookings([SEED_BOOKING])
     cy.reload()
 
-    // Open overflow menu for the seeded booking, then click Delete
     cy.get(`[data-testid="booking-row-${SEED_BOOKING.id}"]`).within(() => {
-      cy.get('button[aria-label="Actions for Seeded Guest"]').click()
-    })
-    // DropdownMenu renders in a portal outside the card, so we scope by role
-    cy.get('[role="menu"]').within(() => {
-      cy.contains('[role="menuitem"]', "Delete").click()
+      cy.contains("button", "Delete").click()
     })
 
-    // Confirm in AlertDialoga
+    // Confirm in AlertDialog
     cy.get('[role="alertdialog"]').within(() => {
       cy.contains("Are you sure you want to delete this booking?").should("be.visible")
       cy.contains("button", "Delete").click()

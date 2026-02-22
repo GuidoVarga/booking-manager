@@ -5,6 +5,7 @@ export const EMILY_BOOKING = makeBooking({
   id: "b-2",
   guestName: "Emily",
   propertyId: "prop-2",
+  nights: 5,
   startDate: "2026-04-10",
   endDate: "2026-04-15",
 })
