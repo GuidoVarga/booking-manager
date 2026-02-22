@@ -23,6 +23,7 @@ import {
   bookingSchema,
   type BookingFormData,
 } from "../utils/validation"
+import dayjs from "dayjs"
 
 interface BookingFormProps {
   booking?: Booking | null
@@ -38,6 +39,7 @@ export function BookingForm({ booking, onSubmit, onCancel }: BookingFormProps) {
     defaultValues: {
       guestName: booking?.guestName || "",
       propertyId: booking?.propertyId || "",
+      numberOfGuests: booking?.numberOfGuests ?? 1,
       startDate: booking?.startDate || "",
       endDate: booking?.endDate || "",
     },
@@ -94,12 +96,26 @@ export function BookingForm({ booking, onSubmit, onCancel }: BookingFormProps) {
 
           <FormField
             control={form.control}
+            name="numberOfGuests"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Number of guests</FormLabel>
+                <FormControl>
+                  <Input type="number" min={1} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
             name="startDate"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Start date</FormLabel>
                 <FormControl>
-                  <Input type="date" {...field} />
+                  <Input type="date" min={dayjs().format("YYYY-MM-DD")} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -113,7 +129,7 @@ export function BookingForm({ booking, onSubmit, onCancel }: BookingFormProps) {
               <FormItem>
                 <FormLabel>End date</FormLabel>
                 <FormControl>
-                  <Input type="date" {...field} />
+                  <Input type="date" min={dayjs().format("YYYY-MM-DD")} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -125,7 +141,7 @@ export function BookingForm({ booking, onSubmit, onCancel }: BookingFormProps) {
           <Button type="button" variant="outline" onClick={onCancel}>
             Cancel
           </Button>
-          <Button type="submit">
+          <Button type="submit" variant="brandAction">
             {isEditing ? "Save changes" : "Create booking"}
           </Button>
         </div>

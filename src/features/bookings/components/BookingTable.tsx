@@ -11,6 +11,7 @@ import {
   TableRow,
 } from "@/shared/ui/Table"
 import { getPropertyName } from "../utils/getPropertyName"
+import { formatDate } from "@/shared/utils/formatDate"
 
 interface BookingTableProps {
   bookings: Booking[]
@@ -21,29 +22,31 @@ interface BookingTableProps {
 export function BookingTable({ bookings, onEdit, onDelete }: BookingTableProps) {
   return (
     <Table>
-      <TableCaption>List of current bookings</TableCaption>
+      <TableCaption className="sr-only">List of current bookings</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead>Guest</TableHead>
-          <TableHead>Property</TableHead>
-          <TableHead>Nights</TableHead>
-          <TableHead>Start</TableHead>
-          <TableHead>End</TableHead>
-          <TableHead className="text-right">Actions</TableHead>
+          <TableHead className="text-muted-foreground">Property</TableHead>
+          <TableHead className="text-muted-foreground">Guest</TableHead>
+          <TableHead className="text-right text-muted-foreground">Guests</TableHead>
+          <TableHead className="text-right text-muted-foreground">Nights</TableHead>
+          <TableHead className="text-muted-foreground text-right">Check-in</TableHead>
+          <TableHead className="text-muted-foreground text-right">Check-out</TableHead>
+          <TableHead className="text-right text-muted-foreground">Actions</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {bookings.map((booking) => (
           <TableRow key={booking.id} data-testid={`booking-row-${booking.id}`}>
-            <TableCell className="font-medium">{booking.guestName}</TableCell>
-            <TableCell>{getPropertyName(booking.propertyId)}</TableCell>
-            <TableCell>{booking.nights}</TableCell>
-            <TableCell>{booking.startDate}</TableCell>
-            <TableCell>{booking.endDate}</TableCell>
+            <TableCell className="font-medium">{getPropertyName(booking.propertyId)}</TableCell>
+            <TableCell>{booking.guestName}</TableCell>
+            <TableCell className="text-right">{booking.numberOfGuests}</TableCell>
+            <TableCell className="text-right">{booking.nights}</TableCell>
+            <TableCell className="text-right">{formatDate(booking.startDate)}</TableCell>
+            <TableCell className="text-right">{formatDate(booking.endDate)}</TableCell>
             <TableCell className="text-right">
               <div className="flex justify-end gap-2">
                 <Button
-                  variant="outline"
+                  variant="primaryOutline"
                   size="sm"
                   aria-label={`Edit booking for ${booking.guestName}`}
                   onClick={() => onEdit(booking.id)}
@@ -52,7 +55,7 @@ export function BookingTable({ bookings, onEdit, onDelete }: BookingTableProps) 
                   Edit
                 </Button>
                 <Button
-                  variant="destructive"
+                  variant="destructiveOutline"
                   size="sm"
                   aria-label={`Delete booking for ${booking.guestName}`}
                   onClick={() => onDelete(booking.id)}

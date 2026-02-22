@@ -1,23 +1,36 @@
 import { vi } from "vitest"
-import { render, screen } from "@testing-library/react"
+import { render, screen, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { BookingTable } from "../BookingTable"
 import { JOHN_BOOKING, EMILY_BOOKING } from "./mockData/mockData"
 import { getPropertyName } from "../../utils/getPropertyName"
+import { formatDate } from "@/shared/utils/formatDate"
 
 const bookings = [JOHN_BOOKING, EMILY_BOOKING]
 
 describe("BookingTable", () => {
-  it("renders all bookings", () => {
+  it("renders all bookings with property as first column", () => {
     render(<BookingTable bookings={bookings} onEdit={vi.fn()} onDelete={vi.fn()} />)
-    expect(screen.getByText(JOHN_BOOKING.guestName)).toBeInTheDocument()
-    expect(screen.getByText(EMILY_BOOKING.guestName)).toBeInTheDocument()
+
+    const johnRow = screen.getByTestId(`booking-row-${JOHN_BOOKING.id}`)
+    const cells = within(johnRow).getAllByRole("cell")
+
+    // Property is the first cell, Guest is the second
+    expect(cells[0]).toHaveTextContent(getPropertyName(JOHN_BOOKING.propertyId))
+    expect(cells[1]).toHaveTextContent(JOHN_BOOKING.guestName)
   })
 
-  it("renders property names instead of ids", () => {
+  it("renders formatted dates instead of ISO strings", () => {
     render(<BookingTable bookings={bookings} onEdit={vi.fn()} onDelete={vi.fn()} />)
-    expect(screen.getByText(getPropertyName(JOHN_BOOKING.propertyId))).toBeInTheDocument()
-    expect(screen.getByText(getPropertyName(EMILY_BOOKING.propertyId))).toBeInTheDocument()
+
+    expect(screen.getByText(formatDate(JOHN_BOOKING.startDate))).toBeInTheDocument()
+    expect(screen.getByText(formatDate(JOHN_BOOKING.endDate))).toBeInTheDocument()
+  })
+
+  it("renders column headers with Check-in / Check-out labels", () => {
+    render(<BookingTable bookings={bookings} onEdit={vi.fn()} onDelete={vi.fn()} />)
+    expect(screen.getByText("Check-in")).toBeInTheDocument()
+    expect(screen.getByText("Check-out")).toBeInTheDocument()
   })
 
   it("calls onEdit with the correct id", async () => {
@@ -40,8 +53,10 @@ describe("BookingTable", () => {
     expect(onDelete).toHaveBeenCalledWith(EMILY_BOOKING.id)
   })
 
-  it("renders accessible table caption", () => {
+  it("renders accessible table caption (sr-only)", () => {
     render(<BookingTable bookings={bookings} onEdit={vi.fn()} onDelete={vi.fn()} />)
-    expect(screen.getByText("List of current bookings")).toBeInTheDocument()
+    const caption = screen.getByText("List of current bookings")
+    expect(caption).toBeInTheDocument()
+    expect(caption).toHaveClass("sr-only")
   })
 })

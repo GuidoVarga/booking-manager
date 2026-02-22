@@ -1,9 +1,9 @@
-import { Calendar, Pencil, Trash2 } from "lucide-react"
+import { Calendar, Pencil, Trash2, Users } from "lucide-react"
 import type { Booking } from "@/shared/types/types"
 import { Button } from "@/shared/ui/Button"
 import { Card, CardContent, CardFooter, CardHeader } from "@/shared/ui/Card"
 import { getPropertyName } from "../utils/getPropertyName"
-import { formatDate } from "../utils/formatDate"
+import { formatDate } from "@/shared/utils/formatDate"
 
 interface BookingCardListProps {
   bookings: Booking[]
@@ -35,14 +35,14 @@ export function BookingCardList({
                   <h3 className="text-2xl font-semibold leading-tight truncate">
                     {propertyName}
                   </h3>
-                  <p className="text-lg text-muted-foreground mt-4">
+                  <p className="text-lg mt-4">
                     {booking.guestName}
                   </p>
                 </div>
               </div>
             </CardHeader>
 
-            <CardContent className="pb-3">
+            <CardContent className="space-y-1.5 pb-3">
               <div className="flex items-center gap-1.5 text-base text-muted-foreground">
                 <Calendar className="h-4 w-4 shrink-0" aria-hidden="true" />
                 <span>
@@ -53,10 +53,17 @@ export function BookingCardList({
                   {booking.nights} {booking.nights === 1 ? "night" : "nights"}
                 </span>
               </div>
+              <div className="flex items-center gap-1.5 text-base text-muted-foreground">
+                <Users className="h-4 w-4 shrink-0" aria-hidden="true" />
+                <span>
+                  {booking.numberOfGuests}{" "}
+                  {booking.numberOfGuests === 1 ? "guest" : "guests"}
+                </span>
+              </div>
             </CardContent>
             <CardFooter className="flex justify-end gap-2">
               <Button
-                variant="outline"
+                variant="primaryOutline"
                 size="sm"
                 aria-label={`Edit booking for ${booking.guestName}`}
                 onClick={() => onEdit(booking.id)}

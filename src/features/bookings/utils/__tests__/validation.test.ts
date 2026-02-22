@@ -4,6 +4,7 @@ import { expectZodError } from "@/test/zodHelpers"
 const validData = {
   guestName: "Jane Smith",
   propertyId: "prop-1",
+  numberOfGuests: 2,
   startDate: "2026-04-01",
   endDate: "2026-04-05",
 }
@@ -35,6 +36,15 @@ describe("bookingSchema", () => {
   it("rejects empty property id", () => {
     const result = bookingSchema.safeParse({ ...validData, propertyId: "" })
     expect(result.success).toBe(false)
+  })
+
+  it("rejects zero guests", () => {
+    expectZodError(
+      bookingSchema,
+      { ...validData, numberOfGuests: 0 },
+      "numberOfGuests",
+      "At least 1 guest is required",
+    )
   })
 
   it("rejects when end date is before start date", () => {

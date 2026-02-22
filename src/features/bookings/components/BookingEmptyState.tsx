@@ -13,7 +13,7 @@ export function BookingEmptyState({ onCreateBooking }: BookingEmptyStateProps) {
       <p className="mt-1 text-sm text-muted-foreground">
         Create your first booking to get started.
       </p>
-      <Button onClick={onCreateBooking} className="mt-6">
+      <Button variant="brandAction" onClick={onCreateBooking} className="mt-6">
         Create booking
       </Button>
     </div>

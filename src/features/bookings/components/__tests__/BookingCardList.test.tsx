@@ -4,28 +4,35 @@ import userEvent from "@testing-library/user-event"
 import { BookingCardList } from "../BookingCardList"
 import { EMILY_BOOKING, JOHN_BOOKING } from "./mockData/mockData"
 import { getPropertyName } from "../../utils/getPropertyName"
+import { formatDate } from "@/shared/utils/formatDate"
 
 const bookings = [JOHN_BOOKING, EMILY_BOOKING]
 
 describe("BookingCardList", () => {
-  it("renders all booking cards", () => {
+  it("renders property as title and guest as subtitle per card", () => {
     render(<BookingCardList bookings={bookings} onEdit={vi.fn()} onDelete={vi.fn()} />)
-    expect(screen.getByText(JOHN_BOOKING.guestName)).toBeInTheDocument()
-    expect(screen.getByText(EMILY_BOOKING.guestName)).toBeInTheDocument()
+
+    const johnCard = screen.getByLabelText(
+      `Booking for ${JOHN_BOOKING.guestName} at ${getPropertyName(JOHN_BOOKING.propertyId)}`,
+    )
+    expect(within(johnCard).getByText(getPropertyName(JOHN_BOOKING.propertyId))).toBeInTheDocument()
+    expect(within(johnCard).getByText(JOHN_BOOKING.guestName)).toBeInTheDocument()
+
+    const emilyCard = screen.getByLabelText(
+      `Booking for ${EMILY_BOOKING.guestName} at ${getPropertyName(EMILY_BOOKING.propertyId)}`,
+    )
+    expect(within(emilyCard).getByText(getPropertyName(EMILY_BOOKING.propertyId))).toBeInTheDocument()
+    expect(within(emilyCard).getByText(EMILY_BOOKING.guestName)).toBeInTheDocument()
   })
 
-  it("shows property name and dates scoped per card", () => {
-    render(<BookingCardList bookings={bookings} onEdit={vi.fn()} onDelete={vi.fn()} />)
+  it("shows formatted dates, nights count, and number of guests", () => {
+    render(<BookingCardList bookings={[JOHN_BOOKING]} onEdit={vi.fn()} onDelete={vi.fn()} />)
 
-    const johnCard = screen.getByLabelText(`Booking for ${JOHN_BOOKING.guestName}`)
-    within(johnCard).getByText(getPropertyName(JOHN_BOOKING.propertyId))
-    within(johnCard).getByText(new RegExp(JOHN_BOOKING.startDate))
-    within(johnCard).getByText(new RegExp(JOHN_BOOKING.endDate))
-
-    const emilyCard = screen.getByLabelText(`Booking for ${EMILY_BOOKING.guestName}`)
-    within(emilyCard).getByText(getPropertyName(EMILY_BOOKING.propertyId))
-    within(emilyCard).getByText(new RegExp(EMILY_BOOKING.startDate))
-    within(emilyCard).getByText(new RegExp(EMILY_BOOKING.endDate))
+    const card = screen.getByRole("article")
+    expect(within(card).getByText(new RegExp(formatDate(JOHN_BOOKING.startDate)))).toBeInTheDocument()
+    expect(within(card).getByText(new RegExp(formatDate(JOHN_BOOKING.endDate)))).toBeInTheDocument()
+    expect(within(card).getByText(new RegExp(`${JOHN_BOOKING.nights} nights`))).toBeInTheDocument()
+    expect(within(card).getByText(new RegExp(`${JOHN_BOOKING.numberOfGuests} guests`))).toBeInTheDocument()
   })
 
   it("calls onEdit with the correct id", async () => {
@@ -48,11 +55,19 @@ describe("BookingCardList", () => {
     expect(onDelete).toHaveBeenCalledWith(EMILY_BOOKING.id)
   })
 
-  it("has accessible article roles on cards", () => {
+  it("has accessible article roles with property context", () => {
     render(<BookingCardList bookings={[JOHN_BOOKING]} onEdit={vi.fn()} onDelete={vi.fn()} />)
-    expect(screen.getByRole("article")).toHaveAttribute(
+    const card = screen.getByRole("article")
+    expect(card).toHaveAttribute(
       "aria-label",
-      `Booking for ${JOHN_BOOKING.guestName}`,
+      `Booking for ${JOHN_BOOKING.guestName} at ${getPropertyName(JOHN_BOOKING.propertyId)}`,
     )
+  })
+
+  it("displays singular 'night' and 'guest' for count of 1", () => {
+    const singleBooking = { ...JOHN_BOOKING, nights: 1, numberOfGuests: 1 }
+    render(<BookingCardList bookings={[singleBooking]} onEdit={vi.fn()} onDelete={vi.fn()} />)
+    expect(screen.getByText(/1 night$/)).toBeInTheDocument()
+    expect(screen.getByText(/1 guest$/)).toBeInTheDocument()
   })
 })

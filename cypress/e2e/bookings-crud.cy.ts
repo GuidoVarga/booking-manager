@@ -4,6 +4,7 @@ const SEED_BOOKING: Booking = {
   id: "seed-1",
   guestName: "Seeded Guest",
   propertyId: "prop-2",
+  numberOfGuests: 2,
   nights: 4,
   startDate: "2026-06-01",
   endDate: "2026-06-05",

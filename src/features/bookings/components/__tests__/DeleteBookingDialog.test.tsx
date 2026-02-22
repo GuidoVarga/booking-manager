@@ -2,19 +2,47 @@ import { vi } from "vitest"
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { DeleteBookingDialog } from "../DeleteBookingDialog"
+import { JOHN_BOOKING } from "./mockData/mockData"
+import { getPropertyName } from "../../utils/getPropertyName"
+import { formatDate } from "@/shared/utils/formatDate"
 
 describe("DeleteBookingDialog", () => {
-  it("renders the dialog when open", () => {
+  it("renders the dialog with contextual booking info", () => {
     render(
-      <DeleteBookingDialog open={true} onOpenChange={vi.fn()} onConfirm={vi.fn()} />,
+      <DeleteBookingDialog
+        open={true}
+        booking={JOHN_BOOKING}
+        onOpenChange={vi.fn()}
+        onConfirm={vi.fn()}
+      />,
     )
     expect(screen.getByText("Are you sure you want to delete this booking?")).toBeInTheDocument()
-    expect(screen.getByText("This action cannot be undone.")).toBeInTheDocument()
+    expect(screen.getByText(getPropertyName(JOHN_BOOKING.propertyId))).toBeInTheDocument()
+    expect(screen.getByText(JOHN_BOOKING.guestName)).toBeInTheDocument()
+    expect(screen.getByText(`${JOHN_BOOKING.nights} nights`)).toBeInTheDocument()
+    expect(screen.getByText(`${formatDate(JOHN_BOOKING.startDate)} → ${formatDate(JOHN_BOOKING.endDate)}`)).toBeInTheDocument()
+  })
+
+  it("renders nothing when booking is null", () => {
+    const { container } = render(
+      <DeleteBookingDialog
+        open={true}
+        booking={null}
+        onOpenChange={vi.fn()}
+        onConfirm={vi.fn()}
+      />,
+    )
+    expect(container.innerHTML).toBe("")
   })
 
   it("does not render dialog content when closed", () => {
     render(
-      <DeleteBookingDialog open={false} onOpenChange={vi.fn()} onConfirm={vi.fn()} />,
+      <DeleteBookingDialog
+        open={false}
+        booking={JOHN_BOOKING}
+        onOpenChange={vi.fn()}
+        onConfirm={vi.fn()}
+      />,
     )
     expect(screen.queryByText("Are you sure you want to delete this booking?")).not.toBeInTheDocument()
   })
@@ -23,7 +51,12 @@ describe("DeleteBookingDialog", () => {
     const user = userEvent.setup()
     const onConfirm = vi.fn()
     render(
-      <DeleteBookingDialog open={true} onOpenChange={vi.fn()} onConfirm={onConfirm} />,
+      <DeleteBookingDialog
+        open={true}
+        booking={JOHN_BOOKING}
+        onOpenChange={vi.fn()}
+        onConfirm={onConfirm}
+      />,
     )
 
     await user.click(screen.getByRole("button", { name: /delete/i }))
@@ -34,7 +67,12 @@ describe("DeleteBookingDialog", () => {
     const user = userEvent.setup()
     const onOpenChange = vi.fn()
     render(
-      <DeleteBookingDialog open={true} onOpenChange={onOpenChange} onConfirm={vi.fn()} />,
+      <DeleteBookingDialog
+        open={true}
+        booking={JOHN_BOOKING}
+        onOpenChange={onOpenChange}
+        onConfirm={vi.fn()}
+      />,
     )
 
     await user.click(screen.getByRole("button", { name: /cancel/i }))

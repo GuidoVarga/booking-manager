@@ -31,7 +31,7 @@ Cypress.Commands.add("seedBookings", (bookings: Booking[]) => {
  */
 Cypress.Commands.add(
   "fillBookingForm",
-  (guest: string, property: string, start: string, end: string) => {
+  (guest: string, property: string, start: string, end: string, numberOfGuests = 2) => {
     cy.get('[data-slot="sheet-content"]').should("be.visible")
 
     cy.get('input[name="guestName"]').should("be.visible").type(guest, { force: true })
@@ -41,6 +41,11 @@ Cypress.Commands.add(
     cy.contains('[role="option"]', property).should("be.visible").click()
     // Assert selection is reflected in trigger text (avoids cy.wait)
     cy.get('[data-testid="property-select"]').should("contain.text", property)
+
+    // Set number of guests (clear default first, then type new value)
+    cy.get('input[name="numberOfGuests"]')
+      .clear({ force: true })
+      .type(String(numberOfGuests), { force: true })
 
     cy.get('input[name="startDate"]').type(start, { force: true })
     cy.get('input[name="endDate"]').type(end, { force: true })
@@ -71,6 +76,7 @@ declare global {
         property: string,
         start: string,
         end: string,
+        numberOfGuests?: number,
       ): Chainable<void>
       submitSheetForm(label?: string): Chainable<void>
       waitForSheetClose(): Chainable<void>

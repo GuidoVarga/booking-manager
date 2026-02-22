@@ -7,6 +7,10 @@ export const bookingSchema = z
       .min(1, "Guest name is required")
       .max(100, "Guest name is too long"),
     propertyId: z.string().min(1, "Property is required"),
+    numberOfGuests: z.coerce
+      .number()
+      .int("Must be a whole number")
+      .min(1, "At least 1 guest is required"),
     startDate: z.string().min(1, "Start date is required"),
     endDate: z.string().min(1, "End date is required"),
   })

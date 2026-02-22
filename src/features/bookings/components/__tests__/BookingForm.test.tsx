@@ -9,6 +9,7 @@ describe("BookingForm", () => {
     render(<BookingForm onSubmit={vi.fn()} onCancel={vi.fn()} />)
 
     expect(screen.getByLabelText(/guest name/i)).toHaveValue("")
+    expect(screen.getByLabelText(/number of guests/i)).toHaveValue(1)
     expect(screen.getByLabelText(/start date/i)).toHaveValue("")
     expect(screen.getByLabelText(/end date/i)).toHaveValue("")
     expect(screen.getByRole("combobox")).toBeInTheDocument()
@@ -19,6 +20,7 @@ describe("BookingForm", () => {
     render(<BookingForm booking={JOHN_BOOKING} onSubmit={vi.fn()} onCancel={vi.fn()} />)
 
     expect(screen.getByLabelText(/guest name/i)).toHaveValue(JOHN_BOOKING.guestName)
+    expect(screen.getByLabelText(/number of guests/i)).toHaveValue(JOHN_BOOKING.numberOfGuests)
     expect(screen.getByLabelText(/start date/i)).toHaveValue(JOHN_BOOKING.startDate)
     expect(screen.getByLabelText(/end date/i)).toHaveValue(JOHN_BOOKING.endDate)
     expect(screen.getByRole("combobox")).toHaveTextContent("Beach House")
@@ -37,6 +39,7 @@ describe("BookingForm", () => {
       {
         guestName: JOHN_BOOKING.guestName,
         propertyId: JOHN_BOOKING.propertyId,
+        numberOfGuests: JOHN_BOOKING.numberOfGuests,
         startDate: JOHN_BOOKING.startDate,
         endDate: JOHN_BOOKING.endDate,
       },

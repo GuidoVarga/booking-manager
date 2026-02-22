@@ -6,7 +6,7 @@ export default function App() {
     <>
       <header className="border-b bg-background">
         <div className="mx-auto max-w-5xl px-4 py-4">
-          <h1 className="text-xl font-semibold tracking-tight">
+          <h1 className="text-2xl font-semibold tracking-tight">
             Booking Manager
           </h1>
         </div>
@@ -16,7 +16,7 @@ export default function App() {
         <BookingsPage />
       </main>
 
-      <Toaster richColors position="top-right" />
+      <Toaster position="bottom-right" />
     </>
   )
 }

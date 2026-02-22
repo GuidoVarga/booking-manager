@@ -1,3 +1,4 @@
+import type { Booking } from "@/shared/types/types"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -8,33 +9,46 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/shared/ui/AlertDialog"
+import { getPropertyName } from "../utils/getPropertyName"
+import { formatDate } from "@/shared/utils/formatDate"
 
 interface DeleteBookingDialogProps {
   open: boolean
+  booking: Booking | null;
   onOpenChange: (open: boolean) => void
   onConfirm: () => void
 }
 
 export function DeleteBookingDialog({
   open,
+  booking,
   onOpenChange,
   onConfirm,
 }: DeleteBookingDialogProps) {
+
+  if (!booking) return null;
+
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Are you sure you want to delete this booking?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This action cannot be undone.
+          <AlertDialogDescription asChild>
+            <div className="space-y-0.5 text-sm">
+              <p className="text-base font-semibold text-foreground">
+                {getPropertyName(booking.propertyId)}
+              </p>
+              <p className="text-muted-foreground">{booking.guestName}</p>
+              <p className="text-muted-foreground">{booking.nights} nights</p>
+              <p className="text-muted-foreground">
+                {formatDate(booking.startDate)} → {formatDate(booking.endDate)}
+              </p>
+            </div>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction
-            onClick={onConfirm}
-            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-          >
+          <AlertDialogAction variant="destructive" onClick={onConfirm}>
             Delete
           </AlertDialogAction>
         </AlertDialogFooter>
